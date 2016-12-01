@@ -6,7 +6,10 @@ from tkinter import ttk
 details = multenterbox("Server Details", "Chat Client", ["IP", "Port", "Name(optional)"])
 ip = details[0]
 port = details[1]
-name = details[2]
+try:
+    name = details[2]
+except:
+    name=""
 
 if name.split(" ")[0] != "":
     name = name.split(" ")[0]
@@ -32,9 +35,9 @@ def main():
     global port
     global name
     global connect
-    print("main")
     connect = socket.socket()
     connect.connect((ip, int(port)))
+    connect.send(bytes("(command)set name {}".format(name), "utf-8"))
     t = threading.Thread(target=receive, args=[connect])
     t.start()
     # I don't need to send at the same time.
